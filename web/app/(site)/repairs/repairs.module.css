@@ -1,0 +1,422 @@
+.hero {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 48px 28px 20px;
+  position: relative;
+}
+
+.heroGlow {
+  position: absolute;
+  top: 0;
+  right: 4%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 65%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.heroInner {
+  position: relative;
+  max-width: 720px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 15px;
+  border-radius: 100px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.08);
+  margin-bottom: 22px;
+}
+
+.badgeDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.badgeText {
+  font-size: 12.5px;
+  letter-spacing: 0.12em;
+  color: var(--accent-soft);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.h1 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
+  font-size: 58px;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 0 0 20px;
+}
+
+.heroText {
+  color: var(--muted-2);
+  font-size: 17px;
+  line-height: 1.7;
+  margin: 0 0 32px;
+}
+
+.heroBtns {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  font-size: 15.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #050505;
+  background: #fff;
+  padding: 16px 28px;
+  border-radius: 14px;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 38px rgba(255, 255, 255, 0.22);
+}
+
+.btnWhatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  font-size: 15.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #fff;
+  background: var(--whatsapp);
+  padding: 16px 28px;
+  border-radius: 14px;
+  transition: transform 0.25s;
+}
+.btnWhatsapp:hover {
+  transform: translateY(-2px);
+}
+
+.section {
+  max-width: 1360px;
+  margin: 80px auto 0;
+  padding: 0 28px;
+}
+
+.sectionHead {
+  margin-bottom: 36px;
+}
+.sectionHead.centered {
+  text-align: center;
+  margin-bottom: 46px;
+}
+
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.sectionTitle {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.sectionNote {
+  color: var(--muted);
+  font-size: 15px;
+  margin: 14px 0 0;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.serviceCard {
+  padding: 34px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.serviceHead {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.serviceIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(59, 130, 246, 0.14);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-soft-2);
+  flex-shrink: 0;
+}
+
+.serviceTitle {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600;
+  font-size: 23px;
+  margin: 0;
+}
+
+.serviceItems {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+
+.serviceItem {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--muted-4);
+  font-size: 14.5px;
+}
+
+.serviceCheck {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  background: rgba(59, 130, 246, 0.14);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--accent-soft-2);
+}
+
+.priceGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.priceRow:hover {
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+.priceLabel {
+  font-size: 15.5px;
+  color: var(--muted-6);
+  font-weight: 500;
+}
+
+.priceValue {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--accent-soft);
+}
+
+.processGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.stepCard {
+  position: relative;
+  padding: 30px 26px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stepNum {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(150deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 22px rgba(59, 130, 246, 0.4);
+}
+
+.stepTitle {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  margin: 0 0 9px;
+}
+
+.stepDesc {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.bookGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 26px;
+  padding: 36px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bookTitle {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
+  font-size: 34px;
+  letter-spacing: -0.02em;
+  margin: 0 0 26px;
+}
+
+.bookSide {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.guaranteeCard {
+  padding: 26px;
+  border-radius: 22px;
+  background: linear-gradient(160deg, rgba(59, 130, 246, 0.14), rgba(59, 130, 246, 0.03));
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.guaranteeTitle {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  margin: 0 0 18px;
+}
+
+.guaranteeList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.guaranteeItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #dbe9fb;
+  font-size: 14.5px;
+}
+
+.guaranteeCheck {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: rgba(59, 130, 246, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--accent-soft);
+}
+
+.hoursCard {
+  padding: 26px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hoursHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.hoursIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-soft-2);
+}
+
+.hoursLabel {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.hoursValue {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.hoursNote {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.footerSpacer {
+  margin-top: 96px;
+}
+
+@media (max-width: 960px) {
+  .servicesGrid,
+  .bookGrid {
+    grid-template-columns: 1fr;
+  }
+  .processGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .processGrid,
+  .priceGrid {
+    grid-template-columns: 1fr;
+  }
+  .h1 {
+    font-size: 40px;
+  }
+}

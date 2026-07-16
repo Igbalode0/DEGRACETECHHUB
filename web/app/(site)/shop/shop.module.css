@@ -1,0 +1,113 @@
+.hero {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 48px 28px 30px;
+  position: relative;
+}
+
+.heroGlow {
+  position: absolute;
+  top: -20px;
+  left: 6%;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 65%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.heroInner {
+  position: relative;
+}
+
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.h1 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
+  font-size: 56px;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+}
+
+.heroText {
+  color: var(--muted-2);
+  font-size: 16.5px;
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0;
+}
+
+.chipsSection {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.chip {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted-4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chipActive {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.gridSection {
+  max-width: 1360px;
+  margin: 32px auto 0;
+  padding: 0 28px;
+}
+
+.countRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.countLabel {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+  gap: 20px;
+}
+
+.footerSpacer {
+  margin-top: 96px;
+}
+
+@media (max-width: 520px) {
+  .h1 {
+    font-size: 40px;
+  }
+}

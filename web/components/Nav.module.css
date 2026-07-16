@@ -1,0 +1,228 @@
+.bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+}
+
+.inner {
+  width: 100%;
+  max-width: 1360px;
+  margin: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: rgba(14, 14, 16, 0.66);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+}
+
+.logoIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: linear-gradient(150deg, var(--accent), var(--accent-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.45);
+  flex-shrink: 0;
+}
+
+.logoIcon span {
+  width: 11px;
+  height: 11px;
+  background: #fff;
+  border-radius: 3px;
+  transform: rotate(45deg);
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.logoMain {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.logoSub {
+  font-size: 9.5px;
+  letter-spacing: 0.34em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.link {
+  position: relative;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 9px 15px;
+  border-radius: 11px;
+  color: var(--muted-3);
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+.link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+}
+.linkActive {
+  color: #fff;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cartBtn {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.cartBtn:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(59, 130, 246, 0.6);
+}
+
+.bookBtn {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #050505;
+  background: #fff;
+  padding: 11px 19px;
+  border-radius: 12px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.bookBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.18);
+}
+
+.menuBtn {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.spacer {
+  height: 82px;
+}
+
+.mobileMenu {
+  position: fixed;
+  top: 82px;
+  left: 20px;
+  right: 20px;
+  z-index: 99;
+  padding: 14px;
+  background: rgba(16, 16, 18, 0.94);
+  backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.mobileLink {
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  color: #e5e7eb;
+  padding: 13px 15px;
+  border-radius: 12px;
+}
+.mobileLink:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.mobileBook {
+  text-decoration: none;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #050505;
+  background: #fff;
+  padding: 13px;
+  border-radius: 12px;
+  margin-top: 6px;
+}
+
+@media (max-width: 860px) {
+  .links,
+  .bookBtn {
+    display: none !important;
+  }
+  .menuBtn {
+    display: flex;
+  }
+}

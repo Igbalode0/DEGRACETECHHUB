@@ -1,0 +1,270 @@
+.hero {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 48px 28px 20px;
+  position: relative;
+}
+
+.heroGlow {
+  position: absolute;
+  top: -10px;
+  left: 8%;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 65%);
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+.heroInner {
+  position: relative;
+  max-width: 640px;
+}
+
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.h1 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 0 0 18px;
+}
+
+.heroText {
+  color: var(--muted-2);
+  font-size: 17px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.section {
+  max-width: 1360px;
+  margin: 44px auto 0;
+  padding: 0 28px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.card {
+  padding: 32px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.detailLink {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  text-decoration: none;
+}
+
+.detailIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--accent-soft-2);
+}
+
+.detailText {
+  padding-top: 2px;
+}
+
+.detailLabel {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.detailValue {
+  font-size: 13.5px;
+  color: var(--muted-2);
+  margin-top: 4px;
+  word-break: break-word;
+}
+
+.whatsappBtn {
+  margin-top: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--whatsapp);
+  padding: 16px;
+  border-radius: 14px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.whatsappBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(37, 211, 102, 0.4);
+}
+
+.formTitle {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  margin: 0 0 20px;
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.mapBox {
+  flex: 1;
+  min-height: 420px;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mapGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(59, 130, 246, 0.12), transparent 60%);
+}
+
+.mapInner {
+  text-align: center;
+  position: relative;
+}
+
+.mapAddr {
+  font-size: 14px;
+  color: var(--muted-4);
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.mapLink {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-soft);
+  text-decoration: none;
+}
+.mapLink:hover {
+  color: #fff;
+}
+
+.hoursCard {
+  padding: 28px;
+  border-radius: 26px;
+  background: linear-gradient(160deg, rgba(59, 130, 246, 0.14), rgba(59, 130, 246, 0.03));
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.hoursHead {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 8px;
+}
+
+.hoursIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(59, 130, 246, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-soft);
+}
+
+.hoursTitle {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  color: #fff;
+}
+
+.hoursRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.hoursRow.last {
+  border-bottom: none;
+}
+
+.hoursDay {
+  color: #c9d7ee;
+  font-size: 14.5px;
+}
+
+.hoursTime {
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.hoursClosed {
+  color: var(--accent-soft);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.footerSpacer {
+  margin-top: 96px;
+}
+
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .h1 {
+    font-size: 40px;
+  }
+  .detailGrid {
+    grid-template-columns: 1fr;
+  }
+}
