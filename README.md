@@ -52,6 +52,14 @@ npm run dev
 - Store: http://localhost:3000
 - Admin: http://localhost:3000/admin
 
+## Deploying
+
+This app has a server side (admin panel, chatbot, product API), so it **cannot run on GitHub Pages** — it needs a Next.js host.
+
+**Vercel (easiest):** import this repo at vercel.com, set **Root Directory** to `web`, add the `ADMIN_PASSWORD` environment variable, and deploy.
+
+> ⚠️ On serverless hosts like Vercel the local file store does not persist — configure the Supabase variables above so products and images live in Supabase. Hosts with a persistent disk (Railway, Render, a VPS) run the file store as-is.
+
 ## Project structure
 
 ```
