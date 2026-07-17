@@ -1,49 +1,44 @@
-import { promises as fs } from "fs";
-import path from "path";
 import type { ChatLogEntry, FeedbackVerdict, IntentId, LearnedState, Ticket } from "./types";
 import { tokenize } from "./knowledge";
+import { chatPersistence } from "./persistence";
 
-// File-backed store so the bot's memory survives restarts with zero infra.
-// Everything goes through this module's exported functions — swapping to a
-// real database later means reimplementing this file only, nothing else.
-//
-//   data/chatbot/learned.json        token boosts + answer-variant scores
-//   data/chatbot/conversations.jsonl every exchange (append-only)
-//   data/chatbot/feedback.jsonl      every thumbs up/down (append-only)
-//   data/chatbot/unanswered.jsonl    learning queue: misses + downvoted answers
-//   data/chatbot/tickets.json        open escalations to a human
+// The chatbot's memory. All persistence goes through the driver returned by
+// chatPersistence() (local files in dev, Supabase in production), and every
+// write is fail-soft: a storage hiccup must never break a customer's reply —
+// the learned state just falls back to the in-process cache until storage
+// recovers.
 
-const DATA_DIR = path.join(process.cwd(), "data", "chatbot");
+const EMPTY_LEARNED: LearnedState = { tokenBoosts: {}, variantScores: {} };
+let learnedCache: LearnedState | null = null;
 
-async function ensureDir() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
+export async function getLearned(): Promise<LearnedState> {
+  try {
+    const loaded = await chatPersistence().loadLearned();
+    if (loaded) learnedCache = loaded;
+  } catch (e) {
+    console.error("chatbot: loading learned state failed, using cache", e);
+  }
+  return learnedCache ?? (learnedCache = structuredClone(EMPTY_LEARNED));
 }
 
-async function readJson<T>(file: string, fallback: T): Promise<T> {
+async function saveLearned(state: LearnedState) {
+  learnedCache = state;
   try {
-    return JSON.parse(await fs.readFile(path.join(DATA_DIR, file), "utf8")) as T;
-  } catch {
-    return fallback;
+    await chatPersistence().saveLearned(state);
+  } catch (e) {
+    console.error("chatbot: persisting learned state failed", e);
   }
 }
 
-async function writeJson(file: string, value: unknown) {
-  await ensureDir();
-  await fs.writeFile(path.join(DATA_DIR, file), JSON.stringify(value, null, 2), "utf8");
-}
-
-async function appendJsonl(file: string, value: unknown) {
-  await ensureDir();
-  await fs.appendFile(path.join(DATA_DIR, file), JSON.stringify(value) + "\n", "utf8");
+async function appendEvent(kind: "conversation" | "feedback" | "unanswered" | "ticket", payload: unknown) {
+  try {
+    await chatPersistence().append(kind, payload);
+  } catch (e) {
+    console.error(`chatbot: appending ${kind} event failed`, e);
+  }
 }
 
 // ---- Learned state (the feedback loop's memory) ---------------------------
-
-const EMPTY_LEARNED: LearnedState = { tokenBoosts: {}, variantScores: {} };
-
-export async function getLearned(): Promise<LearnedState> {
-  return readJson("learned.json", EMPTY_LEARNED);
-}
 
 const TOKEN_BOOST_CAP = 2; // one token can never dominate an intent's score
 
@@ -55,20 +50,22 @@ export async function boostTokens(message: string, intent: IntentId, delta: numb
     const next = (forToken[intent] ?? 0) + delta;
     forToken[intent] = Math.max(-TOKEN_BOOST_CAP, Math.min(TOKEN_BOOST_CAP, next));
   }
-  await writeJson("learned.json", learned);
+  await saveLearned(learned);
 }
 
 export async function scoreVariant(intent: IntentId, variantId: string, delta: number) {
   const learned = await getLearned();
   const key = `${intent}:${variantId}`;
   learned.variantScores[key] = (learned.variantScores[key] ?? 0) + delta;
-  await writeJson("learned.json", learned);
+  await saveLearned(learned);
 }
 
 // ---- Conversation log ------------------------------------------------------
 
 // Recent entries stay in memory so /api/chat can read session context (last
-// intent, consecutive misses) without re-reading the JSONL on every message.
+// intent, consecutive misses) without a storage round-trip. On serverless
+// hosts this cache is per-instance and best-effort — losing it only degrades
+// miss-counting and handoff transcripts, never the reply itself.
 const recent = new Map<string, ChatLogEntry[]>();
 const RECENT_CAP = 20;
 
@@ -77,9 +74,9 @@ export async function logExchange(entry: ChatLogEntry) {
   list.push(entry);
   if (list.length > RECENT_CAP) list.shift();
   recent.set(entry.sessionId, list);
-  await appendJsonl("conversations.jsonl", entry);
+  await appendEvent("conversation", entry);
   if (entry.intent === "fallback") {
-    await appendJsonl("unanswered.jsonl", {
+    await appendEvent("unanswered", {
       at: entry.at,
       reason: "no_intent_matched",
       message: entry.userMessage,
@@ -99,7 +96,7 @@ export function findEntry(sessionId: string, messageId: string): ChatLogEntry | 
 // ---- Feedback ---------------------------------------------------------------
 
 export async function recordFeedback(entry: ChatLogEntry, verdict: FeedbackVerdict) {
-  await appendJsonl("feedback.jsonl", {
+  await appendEvent("feedback", {
     at: new Date().toISOString(),
     sessionId: entry.sessionId,
     messageId: entry.messageId,
@@ -119,7 +116,7 @@ export async function recordFeedback(entry: ChatLogEntry, verdict: FeedbackVerdi
   if (verdict === "down") {
     // Wrong or unhelpful → weaken the association and queue for review.
     if (entry.intent !== "fallback") await boostTokens(entry.userMessage, entry.intent, -0.25);
-    await appendJsonl("unanswered.jsonl", {
+    await appendEvent("unanswered", {
       at: new Date().toISOString(),
       reason: "downvoted",
       message: entry.userMessage,
@@ -132,14 +129,12 @@ export async function recordFeedback(entry: ChatLogEntry, verdict: FeedbackVerdi
 // ---- Escalation tickets ------------------------------------------------------
 
 export async function createTicket(t: Omit<Ticket, "id" | "at" | "status">): Promise<Ticket> {
-  const tickets = await readJson<Ticket[]>("tickets.json", []);
   const ticket: Ticket = {
     ...t,
     id: `DG-${Date.now().toString(36).toUpperCase()}`,
     at: new Date().toISOString(),
     status: "open",
   };
-  tickets.push(ticket);
-  await writeJson("tickets.json", tickets);
+  await appendEvent("ticket", ticket);
   return ticket;
 }

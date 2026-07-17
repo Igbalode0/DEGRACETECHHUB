@@ -36,7 +36,9 @@ async function load(): Promise<CatalogProduct[]> {
     return JSON.parse(await fs.readFile(PRODUCTS_FILE, "utf8")) as CatalogProduct[];
   } catch {
     const seeded = seed();
-    await save(seeded);
+    // Read-only filesystem (e.g. serverless without Supabase configured):
+    // still serve the seed catalog; admin edits require writable storage.
+    await save(seeded).catch(() => {});
     return seeded;
   }
 }
