@@ -3,6 +3,7 @@ import Reveal from "@/components/Reveal";
 import Counter from "@/components/Counter";
 import CategoryCard from "@/components/CategoryCard";
 import ProductCard from "@/components/ProductCard";
+import Magnetic from "@/components/Magnetic";
 import {
   ArrowRightIcon,
   CheckIcon,
@@ -64,13 +65,17 @@ export default async function Home() {
               DE-GRACE TECH HUB delivers quality you can trust.
             </p>
             <div className={styles.heroBtns}>
-              <Link href="/shop" className={styles.btnPrimary}>
-                Shop Now
-                <ArrowRightIcon />
-              </Link>
-              <Link href="/repairs" className={styles.btnSecondary}>
-                Book a Repair
-              </Link>
+              <Magnetic>
+                <Link href="/shop" className={styles.btnPrimary}>
+                  Shop Now
+                  <ArrowRightIcon />
+                </Link>
+              </Magnetic>
+              <Magnetic>
+                <Link href="/repairs" className={styles.btnSecondary}>
+                  Book a Repair
+                </Link>
+              </Magnetic>
             </div>
           </Reveal>
 

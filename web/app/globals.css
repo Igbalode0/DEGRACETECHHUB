@@ -138,6 +138,33 @@ button {
   }
 }
 
+.dg-page-in {
+  animation: dgPageIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes dgPageIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .dg-page-in,
+  [data-reveal] {
+    animation: none;
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 [data-reveal] {
   opacity: 0;
   transform: translateY(24px);

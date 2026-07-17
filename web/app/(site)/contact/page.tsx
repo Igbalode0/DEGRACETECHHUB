@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Questions about a product, a repair, or your order? Reach out any way you like — we respond fast, especially on WhatsApp.",
 };
 
-const MAPS_URL = "https://maps.google.com/?q=Lagos+Nigeria";
+const MAPS_URL = `https://maps.google.com/?q=${encodeURIComponent(ADDRESS)}`;
 
 const DETAILS = [
   { label: "Phone Number", value: PHONE_DISPLAY, href: `tel:${PHONE_TEL}`, external: false, Icon: PhoneIcon },
@@ -74,16 +74,18 @@ export default function ContactPage() {
 
           {/* RIGHT: map + hours */}
           <Reveal className={styles.rightCol}>
-            <div className={`${styles.mapBox} placeholder-fill`}>
-              <div className={styles.mapGlow} />
-              <div className={styles.mapInner}>
-                <PinIcon width={38} height={38} stroke="#60a5fa" strokeWidth={1.5} style={{ marginBottom: 12 }} />
-                <div className="placeholder-label">[ EMBEDDED GOOGLE MAP ]</div>
-                <div className={styles.mapAddr}>{ADDRESS}</div>
-                <a href={MAPS_URL} target="_blank" rel="noreferrer" className={styles.mapLink}>
-                  Open in Google Maps →
-                </a>
-              </div>
+            <div className={styles.mapBox}>
+              <iframe
+                src={`https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}&output=embed`}
+                className={styles.mapFrame}
+                title={`Map showing ${ADDRESS}`}
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              <a href={MAPS_URL} target="_blank" rel="noreferrer" className={styles.mapOverlayLink}>
+                <PinIcon width={15} height={15} /> Open in Google Maps →
+              </a>
             </div>
             <div className={styles.hoursCard}>
               <div className={styles.hoursHead}>
