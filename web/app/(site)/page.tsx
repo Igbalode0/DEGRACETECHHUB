@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import Counter from "@/components/Counter";
 import CategoryCard from "@/components/CategoryCard";
@@ -205,11 +206,15 @@ export default async function Home() {
       {/* WHY CHOOSE US */}
       <section className={styles.section}>
         <div className={styles.whyGrid}>
-          <Reveal className={`${styles.whyImage} placeholder-fill`}>
+          <Reveal className={styles.whyImage}>
+            <Image
+              src="/images/technician.jpg"
+              alt="DE-GRACE technician repairing a smartphone at a workbench"
+              className={styles.whyPhoto}
+              fill
+              sizes="(max-width: 900px) 100vw, 50vw"
+            />
             <div className={styles.whyImageGlow} />
-            <span className="placeholder-label" style={{ position: "relative" }}>
-              [ TECHNICIAN AT WORK ]
-            </span>
           </Reveal>
           <Reveal delayMs={100} className={styles.whyContent}>
             <div className={styles.eyebrow}>Why us</div>
