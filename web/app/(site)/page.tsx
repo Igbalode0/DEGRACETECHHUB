@@ -5,6 +5,7 @@ import Counter from "@/components/Counter";
 import CategoryCard from "@/components/CategoryCard";
 import ProductCard from "@/components/ProductCard";
 import Magnetic from "@/components/Magnetic";
+import ProductArt from "@/components/ProductArt";
 import {
   ArrowRightIcon,
   CheckIcon,
@@ -81,33 +82,35 @@ export default async function Home() {
           </Reveal>
 
           <Reveal delayMs={150} className={styles.heroFloat}>
-            <div className={`${styles.heroShot} placeholder-fill`}>
-              <span className="placeholder-label">[ HERO PRODUCT SHOT ]</span>
+            <div className={styles.heroShot}>
+              <div className={styles.heroSceneGrid} />
+              <div className={styles.heroSceneOrb} />
+              <div className={styles.heroSceneRing} />
             </div>
             <div className={`${styles.floatCard} ${styles.pos1}`}>
               <div className={styles.floatThumb}>
-                <span className={styles.floatThumbLabel}>iphone</span>
+                <ProductArt kind="phone" size={52} />
               </div>
               <span className={styles.floatName}>iPhone</span>
               <div className={styles.floatStatus}>In stock</div>
             </div>
             <div className={`${styles.floatCard} ${styles.pos2}`}>
               <div className={styles.floatThumb}>
-                <span className={styles.floatThumbLabel}>macbook</span>
+                <ProductArt kind="laptop" size={52} />
               </div>
               <span className={styles.floatName}>MacBook</span>
               <div className={styles.floatStatus}>New arrival</div>
             </div>
             <div className={`${styles.floatCard} ${styles.pos3}`}>
               <div className={styles.floatThumb}>
-                <span className={styles.floatThumbLabel}>watch</span>
+                <ProductArt kind="watch" size={48} />
               </div>
               <span className={styles.floatName}>Smartwatch</span>
               <div className={styles.floatStatus}>Best seller</div>
             </div>
             <div className={`${styles.floatCard} ${styles.pos4}`}>
               <div className={styles.floatThumb}>
-                <span className={styles.floatThumbLabel}>earbuds</span>
+                <ProductArt kind="earbuds" size={44} />
               </div>
               <span className={styles.floatName}>Earbuds</span>
               <div className={styles.floatStatus}>Wireless</div>
@@ -320,13 +323,15 @@ export default async function Home() {
               Chat on WhatsApp
             </a>
           </div>
-          <div className={`${styles.mapBox} placeholder-fill`}>
-            <div className={styles.mapGlow} />
-            <div className={styles.mapInner}>
-              <PinIcon width={34} height={34} stroke="#60a5fa" strokeWidth={1.6} style={{ marginBottom: 10 }} />
-              <div className="placeholder-label">[ EMBEDDED GOOGLE MAP ]</div>
-              <div className={styles.mapAddr}>{ADDRESS}</div>
-            </div>
+          <div className={styles.mapBox}>
+            <iframe
+              src={`https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}&output=embed`}
+              className={styles.mapFrame}
+              title={`Map showing ${ADDRESS}`}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </Reveal>
       </section>

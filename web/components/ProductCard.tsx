@@ -1,5 +1,6 @@
 import Reveal from "@/components/Reveal";
 import AddToCartButton from "@/components/AddToCartButton";
+import ProductArt, { artKindFor, tintFor } from "@/components/ProductArt";
 import { naira } from "@/lib/format";
 import type { PublicProduct } from "@/lib/catalog/types";
 import styles from "@/components/ProductCard.module.css";
@@ -7,13 +8,13 @@ import styles from "@/components/ProductCard.module.css";
 export default function ProductCard({ product, showCategory = false }: { product: PublicProduct; showCategory?: boolean }) {
   return (
     <Reveal className={styles.productCard}>
-      <div className={`${styles.productImage} ${product.imageUrl ? "" : "placeholder-fill"}`}>
+      <div className={styles.productImage} style={product.imageUrl ? undefined : { background: tintFor(product.id) }}>
         {product.imageUrl ? (
           // Uploaded via the admin panel (local /uploads or Supabase Storage URL)
           // eslint-disable-next-line @next/next/no-img-element
           <img className={styles.productPhoto} src={product.imageUrl} alt={product.name} loading="lazy" />
         ) : (
-          <span className={styles.productSlug}>{product.slug}</span>
+          <ProductArt kind={artKindFor(product.name, product.category)} size={64} />
         )}
         <span className={styles.productTag}>{product.tag}</span>
         {product.soldOut && <span className={styles.soldOutBadge}>Sold out</span>}
