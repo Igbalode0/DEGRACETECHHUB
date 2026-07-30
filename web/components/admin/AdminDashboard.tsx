@@ -4,7 +4,10 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { naira } from "@/lib/format";
 import { shopCategories } from "@/lib/data";
-import type { CatalogProduct } from "@/lib/catalog/types";
+import type { CatalogProduct, ProductColor } from "@/lib/catalog/types";
+import { colorsOf, mediaOf } from "@/lib/catalog/media";
+import MediaManager, { type EditorMedia } from "@/components/admin/MediaManager";
+import ColorsManager from "@/components/admin/ColorsManager";
 import {
   deleteProductAction,
   saveProductAction,
@@ -22,8 +25,45 @@ export default function AdminDashboard({ products }: { products: CatalogProduct[
   const [saving, startSaving] = useTransition();
   const [, startToggle] = useTransition();
 
+  // Media and colours are edited as structured state, then serialised on save.
+  const [media, setMedia] = useState<EditorMedia[]>([]);
+  const [colors, setColors] = useState<ProductColor[]>([]);
+  const [coverId, setCoverId] = useState<string | null>(null);
+
+  /** Opens the editor seeded from a product (or blank for a new one). */
+  const openEditor = (product: CatalogProduct | null) => {
+    const existingMedia = product ? mediaOf(product) : [];
+    setMedia(
+      existingMedia.map((m) => ({
+        id: m.id,
+        kind: m.kind,
+        url: m.url,
+        colorId: m.colorId,
+        view: m.view,
+      })),
+    );
+    setColors(product ? colorsOf(product) : []);
+    setCoverId(product?.coverMediaId ?? existingMedia[0]?.id ?? null);
+    setError(null);
+    setEditing({ product });
+  };
+
   const submit = (formData: FormData) => {
     setError(null);
+    // Files ride along as "newFiles"; the JSON records the order, tags and
+    // which entry maps to which upload.
+    let uploadIndex = 0;
+    const payload = media.map((m) => {
+      if (m.file) {
+        formData.append("newFiles", m.file);
+        return { id: m.id, kind: m.kind, uploadIndex: uploadIndex++, colorId: m.colorId, view: m.view };
+      }
+      return { id: m.id, kind: m.kind, url: m.url, colorId: m.colorId, view: m.view };
+    });
+    formData.set("mediaJson", JSON.stringify(payload));
+    formData.set("colorsJson", JSON.stringify(colors.filter((c) => c.name.trim())));
+    formData.set("coverMediaId", coverId ?? "");
+
     startSaving(async () => {
       const result = await saveProductAction(formData);
       if (!result.ok) {
@@ -41,8 +81,6 @@ export default function AdminDashboard({ products }: { products: CatalogProduct[
       router.refresh();
     });
 
-  const galleryCount = editing?.product?.images?.length ?? 0;
-
   const remove = (p: CatalogProduct) => {
     if (!window.confirm(`Delete “${p.name}” permanently? Customers will no longer see it.`)) return;
     toggle(deleteProductAction, p.id);
@@ -51,7 +89,7 @@ export default function AdminDashboard({ products }: { products: CatalogProduct[
   return (
     <>
       <div className={styles.tableTop}>
-        <button type="button" className={styles.primaryBtn} onClick={() => setEditing({ product: null })}>
+        <button type="button" className={styles.primaryBtn} onClick={() => openEditor(null)}>
           + Add product
         </button>
       </div>
@@ -110,7 +148,7 @@ export default function AdminDashboard({ products }: { products: CatalogProduct[
                 </td>
                 <td>
                   <div className={styles.rowActions}>
-                    <button type="button" className={styles.ghostBtn} onClick={() => setEditing({ product: p })}>
+                    <button type="button" className={styles.ghostBtn} onClick={() => openEditor(p)}>
                       Edit
                     </button>
                     <button type="button" className={styles.dangerBtn} onClick={() => remove(p)}>
@@ -175,51 +213,41 @@ export default function AdminDashboard({ products }: { products: CatalogProduct[
                 </label>
               </div>
 
-              <div className={styles.fieldRow}>
-                <label className={styles.field}>
-                  <span>Available colors (comma-separated)</span>
-                  <input
-                    className={styles.input}
-                    name="colors"
-                    placeholder="Black, Silver, Gold"
-                    defaultValue={editing.product?.colors.join(", ") ?? ""}
-                  />
-                </label>
-                <label className={styles.field}>
-                  <span>Tag</span>
-                  <input className={styles.input} name="tag" maxLength={20} defaultValue={editing.product?.tag ?? "New"} />
-                </label>
-              </div>
-
               <label className={styles.field}>
-                <span>Main product image {editing.product?.imageUrl ? "(replaces current)" : ""}</span>
-                <input className={styles.fileInput} name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" />
+                <span>Tag</span>
+                <input className={styles.input} name="tag" maxLength={20} defaultValue={editing.product?.tag ?? "New"} />
               </label>
 
+              <section className={styles.editorBlock}>
+                <div className={styles.editorBlockHead}>
+                  <h3 className={styles.editorBlockTitle}>Available colours</h3>
+                  <span className={styles.editorBlockHint}>Swatch, stock and SKU per finish</span>
+                </div>
+                <ColorsManager
+                  colors={colors}
+                  setColors={setColors}
+                  mediaCountFor={(id) => media.filter((m) => m.colorId === id).length}
+                />
+              </section>
+
+              <section className={styles.editorBlock}>
+                <div className={styles.editorBlockHead}>
+                  <h3 className={styles.editorBlockTitle}>Product media</h3>
+                  <span className={styles.editorBlockHint}>Tag a photo to a colour, or leave it shared</span>
+                </div>
+                <MediaManager
+                  media={media}
+                  setMedia={setMedia}
+                  colors={colors}
+                  coverId={coverId}
+                  setCoverId={setCoverId}
+                />
+              </section>
+
               <details className={styles.moreFields} open={false}>
-                <summary className={styles.moreSummary}>
-                  Quick View details
-                  {galleryCount > 0 && <span className={styles.moreBadge}>{galleryCount} gallery images</span>}
-                </summary>
+                <summary className={styles.moreSummary}>Quick View details</summary>
 
                 <div className={styles.moreBody}>
-                  <label className={styles.field}>
-                    <span>Gallery images (select several — front, back, angles, lifestyle)</span>
-                    <input
-                      className={styles.fileInput}
-                      name="gallery"
-                      type="file"
-                      multiple
-                      accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
-                    />
-                  </label>
-                  {galleryCount > 0 && (
-                    <label className={styles.check}>
-                      <input type="checkbox" name="clearGallery" />
-                      <span>Replace existing gallery ({galleryCount} images) instead of adding</span>
-                    </label>
-                  )}
-
                   <label className={styles.field}>
                     <span>Storage options (comma-separated)</span>
                     <input

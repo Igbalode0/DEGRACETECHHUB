@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { shopCategories, type ShopCategory } from "@/lib/data";
 import { productRepo } from "@/lib/catalog/repo";
-import type { CatalogProduct } from "@/lib/catalog/types";
+import { VIEW_TYPES, type CatalogProduct, type MediaKind, type ProductColor, type ProductMedia, type ViewType } from "@/lib/catalog/types";
 import { checkPassword, createAdminSession, destroyAdminSession, requireAdmin } from "@/lib/admin/auth";
 
 // Every mutation revalidates the customer-facing pages, so a save in the
@@ -75,11 +75,6 @@ export async function saveProductAction(formData: FormData): Promise<SaveProduct
   const description = String(formData.get("description") ?? "").trim().slice(0, 300);
   const price = Math.round(Number(formData.get("price")));
   const category = String(formData.get("category") ?? "") as ShopCategory;
-  const colors = String(formData.get("colors") ?? "")
-    .split(",")
-    .map((c) => c.trim())
-    .filter(Boolean)
-    .slice(0, 12);
   const tag = String(formData.get("tag") ?? "New").trim().slice(0, 20) || "New";
   const active = formData.get("active") === "on";
   const soldOut = formData.get("soldOut") === "on";
@@ -117,16 +112,76 @@ export async function saveProductAction(formData: FormData): Promise<SaveProduct
     imageUrl = await repo.saveImage(`${randomUUID()}${ext}`, bytes, image.type);
   }
 
-  // Gallery: newly uploaded shots append to what's already there, unless the
-  // admin ticks "replace gallery".
-  let images = formData.get("clearGallery") === "on" ? [] : (existing?.images ?? []);
-  const uploads = formData.getAll("gallery").filter((f): f is File => f instanceof File && f.size > 0);
-  for (const file of uploads.slice(0, 12)) {
-    const ext = IMAGE_TYPES[file.type];
-    if (!ext) return { ok: false, error: "Gallery images must be JPEG, PNG, WebP, GIF or AVIF." };
-    if (file.size > MAX_IMAGE_BYTES) return { ok: false, error: `"${file.name}" is too large (max 5 MB).` };
-    images = [...images, await repo.saveImage(`${randomUUID()}${ext}`, Buffer.from(await file.arrayBuffer()), file.type)];
+  // ---- colours ----
+  // The editor sends the full colour list as JSON; ids are stable so media
+  // tagged to a colour survives renames and reordering.
+  let colorOptions: ProductColor[] = [];
+  try {
+    const raw = JSON.parse(String(formData.get("colorsJson") ?? "[]")) as ProductColor[];
+    colorOptions = raw
+      .filter((c) => c && typeof c.name === "string" && c.name.trim())
+      .slice(0, 24)
+      .map((c) => ({
+        id: String(c.id || randomUUID().slice(0, 8)),
+        name: c.name.trim().slice(0, 40),
+        hex: /^#[0-9a-f]{6}$/i.test(c.hex) ? c.hex.toLowerCase() : "#8e8e93",
+        stock: c.stock === null || c.stock === undefined || c.stock === ("" as unknown) ? null : Math.max(0, Math.round(Number(c.stock) || 0)),
+        sku: c.sku ? String(c.sku).trim().slice(0, 40) : null,
+      }));
+  } catch {
+    return { ok: false, error: "Colour data was malformed — please re-open the editor and try again." };
   }
+  const colorIds = new Set(colorOptions.map((c) => c.id));
+
+  // ---- media library ----
+  // Each entry either points at an already-stored url, or carries an upload
+  // index into the "newFiles" list. Order in the array is the gallery order.
+  type IncomingMedia = {
+    id?: string;
+    kind?: MediaKind;
+    url?: string;
+    uploadIndex?: number;
+    colorId?: string | null;
+    view?: ViewType;
+    alt?: string;
+  };
+
+  const newFiles = formData.getAll("newFiles").filter((f): f is File => f instanceof File && f.size > 0);
+  const uploadedUrls: string[] = [];
+  for (const file of newFiles.slice(0, 40)) {
+    const ext = IMAGE_TYPES[file.type];
+    if (!ext) return { ok: false, error: `"${file.name}" must be JPEG, PNG, WebP, GIF or AVIF.` };
+    if (file.size > MAX_IMAGE_BYTES) return { ok: false, error: `"${file.name}" is too large (max 5 MB).` };
+    uploadedUrls.push(await repo.saveImage(`${randomUUID()}${ext}`, Buffer.from(await file.arrayBuffer()), file.type));
+  }
+
+  let media: ProductMedia[] = [];
+  try {
+    const raw = JSON.parse(String(formData.get("mediaJson") ?? "[]")) as IncomingMedia[];
+    media = raw
+      .map((m, i): ProductMedia | null => {
+        const url = typeof m.uploadIndex === "number" ? uploadedUrls[m.uploadIndex] : m.url;
+        if (!url) return null;
+        return {
+          id: String(m.id || randomUUID().slice(0, 8)),
+          kind: (m.kind ?? "image") as MediaKind,
+          url,
+          // a tag pointing at a deleted colour falls back to "shared"
+          colorId: m.colorId && colorIds.has(m.colorId) ? m.colorId : null,
+          view: (VIEW_TYPES as readonly string[]).includes(m.view ?? "") ? (m.view as ViewType) : "other",
+          alt: m.alt ? String(m.alt).slice(0, 120) : undefined,
+          sort: i,
+        };
+      })
+      .filter((m): m is ProductMedia => m !== null);
+  } catch {
+    return { ok: false, error: "Media data was malformed — please re-open the editor and try again." };
+  }
+
+  const requestedCover = String(formData.get("coverMediaId") ?? "");
+  const coverMediaId = media.some((m) => m.id === requestedCover) ? requestedCover : (media[0]?.id ?? null);
+  // imageUrl stays in sync so listings, the chatbot and older code keep working.
+  imageUrl = media.find((m) => m.id === coverMediaId)?.url ?? imageUrl;
 
   const now = new Date().toISOString();
   const product: CatalogProduct = {
@@ -136,7 +191,10 @@ export async function saveProductAction(formData: FormData): Promise<SaveProduct
     description,
     price,
     category,
-    colors,
+    colors: colorOptions.map((c) => c.name),
+    colorOptions,
+    media,
+    coverMediaId,
     imageUrl,
     active,
     soldOut,
@@ -144,7 +202,6 @@ export async function saveProductAction(formData: FormData): Promise<SaveProduct
     tag,
     createdAt: existing?.createdAt ?? now,
     updatedAt: now,
-    images,
     storageOptions,
     features,
     specs,

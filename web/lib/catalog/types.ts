@@ -1,5 +1,50 @@
 import type { ShopCategory } from "@/lib/data";
 
+/**
+ * Media kinds. Only "image" is produced today, but every consumer switches on
+ * this field, so adding "video" or "spin" later is additive — no shape changes
+ * to ProductMedia and no migration of existing rows.
+ */
+export type MediaKind = "image" | "video" | "spin";
+
+export const VIEW_TYPES = [
+  "front",
+  "back",
+  "left",
+  "right",
+  "top",
+  "bottom",
+  "angle",
+  "closeup",
+  "lifestyle",
+  "packaging",
+  "other",
+] as const;
+export type ViewType = (typeof VIEW_TYPES)[number];
+
+export type ProductMedia = {
+  id: string;
+  kind: MediaKind;
+  /** Public URL (local /uploads or Supabase Storage). For spin sets, the first frame. */
+  url: string;
+  /** Colour this asset belongs to; null means it is shared across all colours. */
+  colorId: string | null;
+  view: ViewType;
+  alt?: string;
+  /** Display order within the gallery, ascending. */
+  sort: number;
+};
+
+export type ProductColor = {
+  id: string;
+  name: string;
+  /** Swatch fill, e.g. "#1c1c1e". */
+  hex: string;
+  /** Units on hand for this colour; null when the shop doesn't track per-colour. */
+  stock?: number | null;
+  sku?: string | null;
+};
+
 export type CatalogProduct = {
   id: string;
   name: string;
@@ -23,7 +68,13 @@ export type CatalogProduct = {
   // ---- Optional rich detail, surfaced in the Quick View ----
   // Each is rendered only when present, so nothing is ever invented for a
   // product the shop actually sells.
-  /** Extra gallery shots beyond imageUrl, in display order. */
+  /** Structured colours: swatch, per-colour stock and SKU. */
+  colorOptions?: ProductColor[];
+  /** The full media library for this product, in display order. */
+  media?: ProductMedia[];
+  /** Which media item represents the product in listings. */
+  coverMediaId?: string | null;
+  /** Legacy: extra gallery shots beyond imageUrl. Superseded by `media`. */
   images?: string[];
   /** e.g. ["128GB", "256GB", "512GB"] */
   storageOptions?: string[];
@@ -50,6 +101,9 @@ export type PublicProduct = Pick<
   | "rating"
   | "tag"
   | "images"
+  | "colorOptions"
+  | "media"
+  | "coverMediaId"
   | "storageOptions"
   | "features"
   | "specs"
@@ -79,6 +133,9 @@ export function toPublic(p: CatalogProduct): PublicProduct {
     rating: p.rating,
     tag: p.tag,
     images: p.images,
+    colorOptions: p.colorOptions,
+    media: p.media,
+    coverMediaId: p.coverMediaId,
     storageOptions: p.storageOptions,
     features: p.features,
     specs: p.specs,

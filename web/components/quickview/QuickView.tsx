@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ProductArt, { artKindFor } from "@/components/ProductArt";
 import { CartIcon, CheckIcon, CloseIcon, WhatsAppIcon } from "@/components/icons";
+import { colorsOf, mediaOf, mediaForColor } from "@/lib/catalog/media";
 import { useCart } from "@/lib/cart-context";
 import { naira } from "@/lib/format";
 import { WHATSAPP_URL } from "@/lib/data";
@@ -82,10 +83,17 @@ export default function QuickView({
   const [dragY, setDragY] = useState(0);
   const [dragging, setDragging] = useState(false);
 
-  const images = useMemo(
-    () => [product.imageUrl, ...(product.images ?? [])].filter((s): s is string => Boolean(s)),
-    [product],
+  const allColors = useMemo(() => colorsOf(product), [product]);
+  const allMedia = useMemo(() => mediaOf(product), [product]);
+  const selectedColor = allColors[colorIndex] ?? null;
+
+  // Gallery follows the selected colour, falling back to shared shots when a
+  // colour has fewer of its own — see mediaForColor for the exact ladder.
+  const shownMedia = useMemo(
+    () => mediaForColor(allMedia, selectedColor?.id ?? null),
+    [allMedia, selectedColor],
   );
+  const images = useMemo(() => shownMedia.map((m) => m.url), [shownMedia]);
   const artKind = artKindFor(product.name, product.category);
   const monthly = Math.round(product.price / 12 / 1000) * 1000;
 
@@ -144,13 +152,9 @@ export default function QuickView({
 
   const selectColor = (i: number) => {
     setColorIndex(i);
-    // When per-colour shots exist, the gallery follows the selection.
-    if (images.length > 1) {
-      const target = Math.min(i, images.length - 1);
-      setSlide(target);
-      const el = galleryRef.current;
-      el?.scrollTo({ left: target * el.clientWidth, behavior: "smooth" });
-    }
+    // The gallery is colour-scoped, so jump back to that set's first shot.
+    setSlide(0);
+    galleryRef.current?.scrollTo({ left: 0, behavior: 'smooth' });
   };
 
   const goToSlide = (i: number) => {
@@ -166,7 +170,7 @@ export default function QuickView({
     setSlide(Math.round(el.scrollLeft / el.clientWidth));
   };
 
-  const variantSuffix = [product.colors[colorIndex], storage].filter(Boolean).join(" · ");
+  const variantSuffix = [selectedColor?.name, storage].filter(Boolean).join(" · ");
 
   const buyNow = () => {
     const lines = [
@@ -317,22 +321,29 @@ export default function QuickView({
 
           {/* buy panel */}
           <section className={styles.panel}>
-            {product.colors.length > 0 && (
+            {allColors.length > 0 && (
               <div className={styles.optionBlock}>
                 <div className={styles.optionLabel}>
-                  Colour — <span className={styles.optionValue}>{product.colors[colorIndex]}</span>
+                  Colour — <span className={styles.optionValue}>{selectedColor?.name}</span>
+                  {typeof selectedColor?.stock === "number" && selectedColor.stock <= 3 && (
+                    <span className={styles.optionNote}>
+                      {selectedColor.stock === 0 ? "Out of stock" : `Only ${selectedColor.stock} left`}
+                    </span>
+                  )}
                 </div>
                 <div className={styles.swatches} role="radiogroup" aria-label="Colour">
-                  {product.colors.map((c, i) => (
+                  {allColors.map((c, i) => (
                     <button
-                      key={c}
+                      key={c.id}
                       type="button"
                       role="radio"
                       aria-checked={i === colorIndex}
-                      aria-label={c}
-                      title={c}
-                      className={`${styles.swatch} ${i === colorIndex ? styles.swatchActive : ""}`}
-                      style={{ ["--swatch" as string]: swatchFill(c) }}
+                      aria-label={c.name}
+                      title={c.stock === 0 ? `${c.name} — out of stock` : c.name}
+                      className={`${styles.swatch} ${i === colorIndex ? styles.swatchActive : ""} ${
+                        c.stock === 0 ? styles.swatchOut : ""
+                      }`}
+                      style={{ ["--swatch" as string]: c.hex || swatchFill(c.name) }}
                       onClick={() => selectColor(i)}
                     />
                   ))}
