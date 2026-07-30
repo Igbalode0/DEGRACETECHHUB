@@ -101,8 +101,8 @@ export default async function Home() {
                     src={card.src}
                     alt={card.name}
                     className={styles.floatPhoto}
-                    width={400}
-                    height={400}
+                    width={900}
+                    height={700}
                     sizes="(max-width: 900px) 45vw, 260px"
                     priority={i < 2}
                   />

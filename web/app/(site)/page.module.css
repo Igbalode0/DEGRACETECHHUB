@@ -185,8 +185,11 @@
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  height: 480px;
+  gap: 10px;
+  width: 100%;
+  max-width: 430px;
+  height: 340px;
+  margin-left: auto;
 }
 
 .heroShot {
@@ -202,7 +205,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 20px;
+  border-radius: 16px;
   background: var(--card);
   border: 1px solid var(--border);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
@@ -244,11 +247,11 @@
 .floatPhoto {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .floatCard:hover .floatPhoto {
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 .floatCaption {
@@ -256,20 +259,20 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
-  padding: 11px 14px 13px;
+  padding: 9px 12px 10px;
   border-top: 1px solid var(--border);
   background: var(--card);
 }
 
 .floatName {
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--fg);
 }
 
 .floatStatus {
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--fg-secondary);
   font-weight: 500;
   white-space: nowrap;
@@ -514,7 +517,8 @@
 
 .whyImage {
   position: relative;
-  height: 440px;
+  aspect-ratio: 1024 / 559;
+  height: auto;
   border-radius: 28px;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -859,7 +863,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .whyImage:hover .whyPhoto {
