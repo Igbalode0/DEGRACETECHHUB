@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { shopCategories, type ShopCategory } from "@/lib/data";
 import { productRepo } from "@/lib/catalog/repo";
+import { prepareProductImage } from "@/lib/catalog/image-processing";
 import { VIEW_TYPES, type CatalogProduct, type MediaKind, type ProductColor, type ProductMedia, type ViewType } from "@/lib/catalog/types";
 import { checkPassword, createAdminSession, destroyAdminSession, requireAdmin } from "@/lib/admin/auth";
 
@@ -108,8 +109,9 @@ export async function saveProductAction(formData: FormData): Promise<SaveProduct
     const ext = IMAGE_TYPES[image.type];
     if (!ext) return { ok: false, error: "Image must be JPEG, PNG, WebP, GIF or AVIF." };
     if (image.size > MAX_IMAGE_BYTES) return { ok: false, error: "Image is too large (max 5 MB)." };
-    const bytes = Buffer.from(await image.arrayBuffer());
-    imageUrl = await repo.saveImage(`${randomUUID()}${ext}`, bytes, image.type);
+    // Trimmed and normalised so the gallery can size it confidently.
+    const prepared = await prepareProductImage(Buffer.from(await image.arrayBuffer()));
+    imageUrl = await repo.saveImage(`${randomUUID()}${prepared.ext}`, prepared.bytes, prepared.contentType);
   }
 
   // ---- colours ----
@@ -152,7 +154,8 @@ export async function saveProductAction(formData: FormData): Promise<SaveProduct
     const ext = IMAGE_TYPES[file.type];
     if (!ext) return { ok: false, error: `"${file.name}" must be JPEG, PNG, WebP, GIF or AVIF.` };
     if (file.size > MAX_IMAGE_BYTES) return { ok: false, error: `"${file.name}" is too large (max 5 MB).` };
-    uploadedUrls.push(await repo.saveImage(`${randomUUID()}${ext}`, Buffer.from(await file.arrayBuffer()), file.type));
+    const prepared = await prepareProductImage(Buffer.from(await file.arrayBuffer()));
+    uploadedUrls.push(await repo.saveImage(`${randomUUID()}${prepared.ext}`, prepared.bytes, prepared.contentType));
   }
 
   let media: ProductMedia[] = [];
