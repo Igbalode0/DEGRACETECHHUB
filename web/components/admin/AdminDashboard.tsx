@@ -41,6 +41,8 @@ export default function AdminDashboard({ products }: { products: CatalogProduct[
       router.refresh();
     });
 
+  const galleryCount = editing?.product?.images?.length ?? 0;
+
   const remove = (p: CatalogProduct) => {
     if (!window.confirm(`Delete “${p.name}” permanently? Customers will no longer see it.`)) return;
     toggle(deleteProductAction, p.id);
@@ -190,9 +192,77 @@ export default function AdminDashboard({ products }: { products: CatalogProduct[
               </div>
 
               <label className={styles.field}>
-                <span>Product image {editing.product?.imageUrl ? "(replaces current)" : ""}</span>
+                <span>Main product image {editing.product?.imageUrl ? "(replaces current)" : ""}</span>
                 <input className={styles.fileInput} name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" />
               </label>
+
+              <details className={styles.moreFields} open={false}>
+                <summary className={styles.moreSummary}>
+                  Quick View details
+                  {galleryCount > 0 && <span className={styles.moreBadge}>{galleryCount} gallery images</span>}
+                </summary>
+
+                <div className={styles.moreBody}>
+                  <label className={styles.field}>
+                    <span>Gallery images (select several — front, back, angles, lifestyle)</span>
+                    <input
+                      className={styles.fileInput}
+                      name="gallery"
+                      type="file"
+                      multiple
+                      accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+                    />
+                  </label>
+                  {galleryCount > 0 && (
+                    <label className={styles.check}>
+                      <input type="checkbox" name="clearGallery" />
+                      <span>Replace existing gallery ({galleryCount} images) instead of adding</span>
+                    </label>
+                  )}
+
+                  <label className={styles.field}>
+                    <span>Storage options (comma-separated)</span>
+                    <input
+                      className={styles.input}
+                      name="storageOptions"
+                      placeholder="128GB, 256GB, 512GB, 1TB"
+                      defaultValue={editing.product?.storageOptions?.join(", ") ?? ""}
+                    />
+                  </label>
+
+                  <label className={styles.field}>
+                    <span>Key features — one per line, as “icon | label”</span>
+                    <textarea
+                      className={styles.textarea}
+                      name="features"
+                      rows={4}
+                      placeholder={"📸 | 48MP Triple Camera\n🔋 | Up to 29 hours battery\n⚡ | Fast charging"}
+                      defaultValue={editing.product?.features?.map((f) => `${f.icon} | ${f.label}`).join("\n") ?? ""}
+                    />
+                  </label>
+
+                  <label className={styles.field}>
+                    <span>Specifications — one per line, as “Label: value”</span>
+                    <textarea
+                      className={styles.textarea}
+                      name="specs"
+                      rows={5}
+                      placeholder={"Display: 6.1-inch OLED\nProcessor: A17 Pro\nRAM: 8GB\nBattery: 3,274 mAh\nWarranty: 1 year"}
+                      defaultValue={editing.product?.specs?.map((s) => `${s.label}: ${s.value}`).join("\n") ?? ""}
+                    />
+                  </label>
+
+                  <label className={styles.field}>
+                    <span>What&apos;s in the box (comma-separated)</span>
+                    <input
+                      className={styles.input}
+                      name="included"
+                      placeholder="Phone, USB-C cable, SIM tool, Documentation"
+                      defaultValue={editing.product?.included?.join(", ") ?? ""}
+                    />
+                  </label>
+                </div>
+              </details>
 
               <div className={styles.toggleRow}>
                 <label className={styles.check}>

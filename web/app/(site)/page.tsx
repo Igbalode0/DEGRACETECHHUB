@@ -2,8 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import Counter from "@/components/Counter";
-import CategoryCard from "@/components/CategoryCard";
 import ProductCard from "@/components/ProductCard";
+import PremiumCollection from "@/components/PremiumCollection";
 import Magnetic from "@/components/Magnetic";
 import ProductArt from "@/components/ProductArt";
 import {
@@ -20,7 +20,6 @@ import {
 } from "@/components/icons";
 import {
   ADDRESS,
-  categories,
   contacts,
   reasons,
   reviews,
@@ -188,23 +187,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* FEATURED CATEGORIES */}
-      <section className={styles.section}>
-        <Reveal as="div" className={styles.sectionHeadRow}>
-          <div>
-            <div className={styles.eyebrow}>Browse</div>
-            <h2 className={styles.sectionTitle}>Featured Categories</h2>
-          </div>
-          <Link href="/shop" className={styles.sectionLink}>
-            View all →
-          </Link>
-        </Reveal>
-        <div className={styles.catGrid}>
-          {categories.map((cat) => (
-            <CategoryCard key={cat.name} name={cat.name} emoji={cat.emoji} href="/shop" />
-          ))}
-        </div>
-      </section>
+      {/* PREMIUM COLLECTION */}
+      <PremiumCollection />
 
       {/* WHY CHOOSE US */}
       <section className={styles.section}>

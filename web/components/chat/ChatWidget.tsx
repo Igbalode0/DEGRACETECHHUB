@@ -53,6 +53,18 @@ export default function ChatWidget() {
     if (open) inputRef.current?.focus();
   }, [open]);
 
+  // Other parts of the site (e.g. the product Quick View) can hand a question
+  // to the assistant: window.dispatchEvent(new CustomEvent("dg:ask", { detail: { message } })).
+  useEffect(() => {
+    const onAsk = (e: Event) => {
+      const { message } = (e as CustomEvent<{ message?: string }>).detail ?? {};
+      setOpen(true);
+      if (message) setInput(message);
+    };
+    window.addEventListener("dg:ask", onAsk);
+    return () => window.removeEventListener("dg:ask", onAsk);
+  }, []);
+
   const send = useCallback(
     async (raw: string) => {
       const text = raw.trim();

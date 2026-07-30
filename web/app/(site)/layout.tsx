@@ -1,4 +1,5 @@
 import { CartProvider } from "@/lib/cart-context";
+import { QuickViewProvider } from "@/lib/quickview-context";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
@@ -10,12 +11,14 @@ import CursorGlow from "@/components/CursorGlow";
 export default function SiteLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <CartProvider>
-      <Nav />
-      {children}
-      <Footer />
-      <CartDrawer />
-      <ChatWidget />
-      <CursorGlow />
+      <QuickViewProvider>
+        <Nav />
+        {children}
+        <Footer />
+        <CartDrawer />
+        <ChatWidget />
+        <CursorGlow />
+      </QuickViewProvider>
     </CartProvider>
   );
 }

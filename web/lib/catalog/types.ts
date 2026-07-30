@@ -19,12 +19,41 @@ export type CatalogProduct = {
   tag: string;
   createdAt: string;
   updatedAt: string;
+
+  // ---- Optional rich detail, surfaced in the Quick View ----
+  // Each is rendered only when present, so nothing is ever invented for a
+  // product the shop actually sells.
+  /** Extra gallery shots beyond imageUrl, in display order. */
+  images?: string[];
+  /** e.g. ["128GB", "256GB", "512GB"] */
+  storageOptions?: string[];
+  /** Highlight cards, e.g. { icon: "📸", label: "48MP Triple Camera" } */
+  features?: { icon: string; label: string }[];
+  /** Accordion rows, e.g. { label: "Battery", value: "4,441 mAh" } */
+  specs?: { label: string; value: string }[];
+  /** In-the-box items, e.g. ["Phone", "USB-C Cable", "SIM Tool"] */
+  included?: string[];
 };
 
 /** What the customer-facing site (and its polling endpoint) receives. */
 export type PublicProduct = Pick<
   CatalogProduct,
-  "id" | "name" | "slug" | "description" | "price" | "category" | "colors" | "imageUrl" | "soldOut" | "rating" | "tag"
+  | "id"
+  | "name"
+  | "slug"
+  | "description"
+  | "price"
+  | "category"
+  | "colors"
+  | "imageUrl"
+  | "soldOut"
+  | "rating"
+  | "tag"
+  | "images"
+  | "storageOptions"
+  | "features"
+  | "specs"
+  | "included"
 >;
 
 export type ProductRepo = {
@@ -49,5 +78,10 @@ export function toPublic(p: CatalogProduct): PublicProduct {
     soldOut: p.soldOut,
     rating: p.rating,
     tag: p.tag,
+    images: p.images,
+    storageOptions: p.storageOptions,
+    features: p.features,
+    specs: p.specs,
+    included: p.included,
   };
 }
