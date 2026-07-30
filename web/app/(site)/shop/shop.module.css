@@ -11,7 +11,7 @@
   left: 6%;
   width: 360px;
   height: 360px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 65%);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.2), transparent 65%);
   filter: blur(30px);
   pointer-events: none;
 }
@@ -67,14 +67,14 @@
   border-radius: 100px;
   cursor: pointer;
   transition: all 0.2s;
-  background: rgba(255, 255, 255, 0.04);
+  background: #f8f8f8;
   color: var(--muted-4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
 }
 
 .chipActive {
   background: var(--accent);
-  color: #fff;
+  color: var(--fg);
   border-color: var(--accent);
 }
 

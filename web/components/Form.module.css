@@ -13,16 +13,16 @@
   box-sizing: border-box;
   font-family: var(--font-inter), sans-serif;
   font-size: 14.5px;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--fg);
+  background: #f8f8f8;
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 13px 15px;
 }
 
 .input::placeholder,
 .textarea::placeholder {
-  color: #5a5a62;
+  color: #8a8a8a;
 }
 
 .input:focus,
@@ -41,7 +41,7 @@
 }
 
 .select option {
-  background: #0d0d10;
+  background: #ffffff;
 }
 
 .row2 {
@@ -58,11 +58,11 @@
   font-family: var(--font-inter), sans-serif;
   font-size: 15.5px;
   font-weight: 600;
-  color: #050505;
-  background: #fff;
+  color: #ffffff;
+  background: var(--accent);
   border: none;
   padding: 16px;
-  border-radius: 14px;
+  border-radius: 999px;
   cursor: pointer;
   transition:
     background 0.2s,
@@ -70,5 +70,5 @@
 }
 .submitBtn:hover {
   background: var(--accent);
-  color: #fff;
+  color: #ffffff;
 }

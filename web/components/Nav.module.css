@@ -16,12 +16,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  background: rgba(14, 14, 16, 0.66);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
   border: 1px solid var(--border);
   border-radius: 22px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
 .logo {
@@ -39,7 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 18px rgba(59, 130, 246, 0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
   flex-shrink: 0;
 }
 
@@ -62,7 +62,7 @@
   font-weight: 700;
   font-size: 15px;
   letter-spacing: 0.06em;
-  color: #fff;
+  color: var(--fg);
 }
 
 .logoSub {
@@ -92,11 +92,11 @@
     background 0.2s;
 }
 .link:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--fg);
+  background: #f8f8f8;
 }
 .linkActive {
-  color: #fff;
+  color: var(--fg);
 }
 
 .right {
@@ -110,9 +110,9 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  border: 1px solid var(--border);
+  background: #f8f8f8;
+  color: var(--fg);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -120,7 +120,7 @@
   transition: background 0.2s;
 }
 .cartBtn:hover {
-  background: rgba(255, 255, 255, 0.09);
+  background: #f2f2f2;
 }
 
 .badge {
@@ -132,13 +132,13 @@
   padding: 0 5px;
   border-radius: 10px;
   background: var(--accent);
-  color: #fff;
+  color: var(--fg);
   font-size: 11px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 3px 10px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
 }
 
 .bookBtn {
@@ -146,17 +146,17 @@
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
-  color: #050505;
-  background: #fff;
+  color: #ffffff;
+  background: var(--accent);
   padding: 11px 19px;
-  border-radius: 12px;
+  border-radius: 999px;
   transition:
     transform 0.2s,
     box-shadow 0.2s;
 }
 .bookBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.050);
 }
 
 .menuBtn {
@@ -164,9 +164,9 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  border: 1px solid var(--border);
+  background: #f8f8f8;
+  color: var(--fg);
   cursor: pointer;
   align-items: center;
   justify-content: center;
@@ -183,14 +183,14 @@
   right: 20px;
   z-index: 99;
   padding: 14px;
-  background: rgba(16, 16, 18, 0.94);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(22px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.120);
 }
 
 .mobileLink {
@@ -202,7 +202,7 @@
   border-radius: 12px;
 }
 .mobileLink:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: #f8f8f8;
 }
 
 .mobileBook {
@@ -210,7 +210,7 @@
   text-align: center;
   font-size: 15px;
   font-weight: 600;
-  color: #050505;
+  color: var(--fg);
   background: #fff;
   padding: 13px;
   border-radius: 12px;

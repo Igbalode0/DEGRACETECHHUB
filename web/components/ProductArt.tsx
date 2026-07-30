@@ -38,19 +38,23 @@ export function artKindFor(name: string, category?: string): ArtKind {
 
 /** Deterministic card tint so each artless product looks intentional, not broken. */
 export function tintFor(id: string): string {
+  // Grayscale only — the variation is in depth, not hue.
   const hues = [
-    "rgba(59, 130, 246, 0.14)", // blue
-    "rgba(99, 102, 241, 0.13)", // indigo
-    "rgba(56, 189, 248, 0.12)", // sky
-    "rgba(45, 212, 191, 0.11)", // teal
+    "rgba(0, 0, 0, 0.05)",
+    "rgba(0, 0, 0, 0.035)",
+    "rgba(0, 0, 0, 0.065)",
+    "rgba(0, 0, 0, 0.045)",
   ];
   let h = 0;
   for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
   return `radial-gradient(120% 100% at 50% 0%, ${hues[h % hues.length]}, rgba(255, 255, 255, 0.02) 70%)`;
 }
 
-const STROKE = "rgba(245, 246, 250, 0.82)";
-const ACCENT = "#60a5fa";
+// Inherits the surrounding text colour, so the same artwork reads correctly on
+// the light product cards and inside the dark showcase band.
+const STROKE = "currentColor";
+// Detail strokes sit at 55% of the main stroke, so accents read as depth.
+const ACCENT = "currentColor";
 
 const SHAPES: Record<ArtKind, React.ReactNode> = {
   phone: (
@@ -127,7 +131,7 @@ export default function ProductArt({ kind, size = 56 }: { kind: ArtKind; size?: 
       stroke={STROKE}
       strokeWidth="2"
       aria-hidden="true"
-      style={{ filter: "drop-shadow(0 0 14px rgba(59, 130, 246, 0.28))" }}
+      style={{ filter: "drop-shadow(0 6px 14px rgba(0, 0, 0, 0.12))", opacity: 0.9 }}
     >
       {SHAPES[kind]}
     </svg>

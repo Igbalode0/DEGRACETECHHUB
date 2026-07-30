@@ -5,7 +5,6 @@ import Counter from "@/components/Counter";
 import ProductCard from "@/components/ProductCard";
 import PremiumCollection from "@/components/PremiumCollection";
 import Magnetic from "@/components/Magnetic";
-import ProductArt from "@/components/ProductArt";
 import {
   ArrowRightIcon,
   CheckIcon,
@@ -29,6 +28,15 @@ import {
 } from "@/lib/data";
 import { listPublicProducts } from "@/lib/catalog/repo";
 import styles from "./page.module.css";
+
+// Hero product cards. Images live in public/images/products and are shared
+// with the Premium Collection section, which resolves the same filenames.
+const HERO_CARDS = [
+  { name: "iPhone", status: "In stock", src: "/images/products/iphone.webp" },
+  { name: "MacBook", status: "New arrival", src: "/images/products/macbook.webp" },
+  { name: "Smartwatch", status: "Best seller", src: "/images/products/apple-watch.webp" },
+  { name: "Earbuds", status: "Wireless", src: "/images/products/airpods.webp" },
+] as const;
 
 const SERVICE_ICONS = {
   repairs: RepairIcon,
@@ -86,34 +94,25 @@ export default async function Home() {
               <div className={styles.heroSceneOrb} />
               <div className={styles.heroSceneRing} />
             </div>
-            <div className={`${styles.floatCard} ${styles.pos1}`}>
-              <div className={styles.floatThumb}>
-                <ProductArt kind="phone" size={52} />
+            {HERO_CARDS.map((card, i) => (
+              <div key={card.name} className={`${styles.floatCard} ${styles[`pos${i + 1}`]}`}>
+                <div className={styles.floatThumb}>
+                  <Image
+                    src={card.src}
+                    alt={card.name}
+                    className={styles.floatPhoto}
+                    width={400}
+                    height={400}
+                    sizes="(max-width: 900px) 45vw, 260px"
+                    priority={i < 2}
+                  />
+                </div>
+                <div className={styles.floatCaption}>
+                  <span className={styles.floatName}>{card.name}</span>
+                  <span className={styles.floatStatus}>{card.status}</span>
+                </div>
               </div>
-              <span className={styles.floatName}>iPhone</span>
-              <div className={styles.floatStatus}>In stock</div>
-            </div>
-            <div className={`${styles.floatCard} ${styles.pos2}`}>
-              <div className={styles.floatThumb}>
-                <ProductArt kind="laptop" size={52} />
-              </div>
-              <span className={styles.floatName}>MacBook</span>
-              <div className={styles.floatStatus}>New arrival</div>
-            </div>
-            <div className={`${styles.floatCard} ${styles.pos3}`}>
-              <div className={styles.floatThumb}>
-                <ProductArt kind="watch" size={48} />
-              </div>
-              <span className={styles.floatName}>Smartwatch</span>
-              <div className={styles.floatStatus}>Best seller</div>
-            </div>
-            <div className={`${styles.floatCard} ${styles.pos4}`}>
-              <div className={styles.floatThumb}>
-                <ProductArt kind="earbuds" size={44} />
-              </div>
-              <span className={styles.floatName}>Earbuds</span>
-              <div className={styles.floatStatus}>Wireless</div>
-            </div>
+            ))}
           </Reveal>
         </div>
       </section>

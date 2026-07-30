@@ -6,7 +6,7 @@
   overflow: hidden;
   margin-top: 96px;
   padding: 92px 0 100px;
-  background: linear-gradient(178deg, #07111f 0%, #0a1630 52%, #07111f 100%);
+  background: linear-gradient(180deg, #000000 0%, #0a0a0a 50%, #000000 100%);
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
@@ -48,14 +48,14 @@
   left: 12%;
   width: 620px;
   height: 620px;
-  background: radial-gradient(circle, rgba(59, 130, 246, 0.16), transparent 62%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.07), transparent 62%);
 }
 .lightB {
   bottom: -220px;
   right: 6%;
   width: 560px;
   height: 560px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.13), transparent 62%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05), transparent 62%);
 }
 
 .particle {
@@ -63,8 +63,8 @@
   width: 3px;
   height: 3px;
   border-radius: 50%;
-  background: rgba(147, 197, 253, 0.85);
-  box-shadow: 0 0 9px 2px rgba(96, 165, 250, 0.55);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 9px 2px rgba(255, 255, 255, 0.35);
   opacity: 0;
   animation: particleRise 15s ease-in-out infinite;
 }
@@ -129,7 +129,7 @@
   width: 52px;
   height: 3px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--accent), rgba(59, 130, 246, 0.15));
+  background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.15));
   margin-bottom: 22px;
 }
 
@@ -146,7 +146,7 @@
 .subtitle {
   font-size: 17px;
   line-height: 1.68;
-  color: var(--muted-2);
+  color: #a6a6a6;
   margin: 0;
 }
 
@@ -174,12 +174,12 @@
   padding: 26px 24px 22px;
   border-radius: 30px;
   background:
-    radial-gradient(120% 90% at 50% 0%, rgba(59, 130, 246, 0.09), transparent 58%),
-    linear-gradient(180deg, rgba(23, 33, 54, 0.92), rgba(17, 24, 39, 0.96));
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.05), transparent 58%),
+    linear-gradient(180deg, #1b1b1b, #141414);
   border: 1px solid rgba(255, 255, 255, 0.06);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
-  box-shadow: 0 18px 44px rgba(2, 6, 18, 0.5);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
   overflow: hidden;
   transition:
     transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
@@ -190,11 +190,10 @@
 .card:hover,
 .card:focus-within {
   transform: translateY(-8px) scale(1.02);
-  border-color: rgba(59, 130, 246, 0.45);
+  border-color: rgba(255, 255, 255, 0.22);
   box-shadow:
-    0 26px 60px rgba(2, 6, 18, 0.6),
-    0 0 0 1px rgba(59, 130, 246, 0.18),
-    0 0 46px rgba(59, 130, 246, 0.22);
+    0 30px 70px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .cardHead {
@@ -208,7 +207,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent-soft-2);
+  color: #9a9a9a;
   margin-bottom: 12px;
 }
 
@@ -224,7 +223,7 @@
 .desc {
   font-size: 13.5px;
   line-height: 1.6;
-  color: var(--muted-3);
+  color: #9a9a9a;
   margin: 0;
 }
 
@@ -274,7 +273,7 @@
   width: 62%;
   height: 20px;
   transform: translateX(-50%);
-  background: radial-gradient(ellipse at center, rgba(2, 6, 18, 0.72), transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85), transparent 70%);
   filter: blur(7px);
   animation: shadowPulse 7s ease-in-out infinite;
 }
@@ -316,10 +315,10 @@
   gap: 6px;
   font-size: 12.5px;
   font-weight: 600;
-  color: #6ee7a8;
+  color: #ffffff;
 }
 .stockOut {
-  color: var(--muted);
+  color: #8a8a8a;
 }
 .tick {
   font-size: 11px;
@@ -327,7 +326,7 @@
 
 .price {
   font-size: 12.5px;
-  color: var(--muted-4);
+  color: #9a9a9a;
   letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
@@ -341,12 +340,12 @@
   text-decoration: none;
   font-size: 12.5px;
   font-weight: 600;
-  color: #fff;
+  color: #000000;
   padding: 9px 15px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #2563eb, #1e3a8a);
-  border: 1px solid rgba(147, 197, 253, 0.24);
-  box-shadow: 0 6px 18px rgba(29, 78, 216, 0.32);
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
   transition:
     transform 0.26s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.26s ease,
@@ -354,10 +353,10 @@
 }
 .pill:hover {
   transform: translateY(-2px);
-  filter: brightness(1.12);
+  filter: none;
   box-shadow:
-    0 10px 26px rgba(37, 99, 235, 0.5),
-    0 0 22px rgba(96, 165, 250, 0.45);
+    0 10px 26px rgba(0, 0, 0, 0.5),
+    0 0 22px rgba(0, 0, 0, 0.45);
 }
 
 .pillLabel {
